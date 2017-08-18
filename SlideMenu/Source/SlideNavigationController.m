@@ -28,11 +28,6 @@
 #import "SlideNavigationController.h"
 #import "SlideNavigationContorllerAnimator.h"
 
-typedef enum {
-	PopTypeAll,
-	PopTypeRoot
-} PopType;
-
 @interface SlideNavigationController() <UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UITapGestureRecognizer *tapRecognizer;
 @property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;
@@ -224,7 +219,22 @@ static SlideNavigationController *singletonInstance;
 		}
 		else {
 			[super popToRootViewControllerAnimated:NO];
-			[super pushViewController:viewController animated:NO];
+            
+            if (poptype == PopTypeRootAnimated) {
+                __block CGRect frame = viewController.view.frame;
+                frame.origin.y = -viewController.view.frame.size.height;
+                viewController.view.frame = frame;
+
+                [UIView animateWithDuration:0.3f animations:^{
+                    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+                    [super pushViewController:viewController animated:NO];
+                    frame.origin.y = 0;
+                    viewController.view.frame = frame;
+                }];
+            }
+            else {
+                [super pushViewController:viewController animated:NO];
+            }
 		}
 		
 		if (closeMenuBeforeCallingCompletion)

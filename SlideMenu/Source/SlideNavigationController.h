@@ -62,8 +62,20 @@ extern NSString  *const SlideNavigationControllerDidReveal;
 @property (nonatomic, assign) UIViewAnimationOptions menuRevealAnimationOption;
 @property (nonatomic, strong) id <SlideNavigationContorllerAnimator> menuRevealAnimator;
 
+typedef enum {
+	PopTypeAll,
+	PopTypeRoot,
+    PopTypeRootAnimated
+} PopType;
+
 + (SlideNavigationController *)sharedInstance;
 - (void)switchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion __deprecated;
+
+- (void)switchToViewController:(UIViewController *)viewController
+		 withSlideOutAnimation:(BOOL)slideOutAnimation
+					   popType:(PopType)poptype
+				 andCompletion:(void (^)())completion;
+
 - (void)popToRootAndSwitchToViewController:(UIViewController *)viewController withSlideOutAnimation:(BOOL)slideOutAnimation andCompletion:(void (^)())completion;
 - (void)popToRootAndSwitchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion;
 - (void)popAllAndSwitchToViewController:(UIViewController *)viewController withSlideOutAnimation:(BOOL)slideOutAnimation andCompletion:(void (^)())completion;
