@@ -64,6 +64,7 @@ extern NSString  *const SlideNavigationControllerDidReveal;
 
 typedef enum {
 	PopTypeAll,
+    PopTypeAllAnimated,
 	PopTypeRoot,
     PopTypeRootAnimated
 } PopType;

@@ -214,10 +214,27 @@ static SlideNavigationController *singletonInstance;
 	}
 	
 	void (^switchAndCallCompletion)(BOOL) = ^(BOOL closeMenuBeforeCallingCompletion) {
-		if (poptype == PopTypeAll) {
-			[self setViewControllers:@[viewController]];
-		}
-		else {
+        switch (poptype) {
+        case PopTypeAll:
+            [self setViewControllers:@[viewController]];
+            break;
+            
+        case PopTypeAllAnimated: {
+                __block CGRect frame = viewController.view.frame;
+                frame.origin.y = -viewController.view.frame.size.height;
+                viewController.view.frame = frame;
+
+                [UIView animateWithDuration:0.3f animations:^{
+                    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+                    [self setViewControllers:@[viewController]];
+                    frame.origin.y = 0;
+                    viewController.view.frame = frame;
+                }];
+            }
+            break;
+            
+        case PopTypeRoot:
+        case PopTypeRootAnimated:
 			[super popToRootViewControllerAnimated:NO];
             
             if (poptype == PopTypeRootAnimated) {
@@ -235,7 +252,8 @@ static SlideNavigationController *singletonInstance;
             else {
                 [super pushViewController:viewController animated:NO];
             }
-		}
+            break;
+        }
 		
 		if (closeMenuBeforeCallingCompletion)
 		{
