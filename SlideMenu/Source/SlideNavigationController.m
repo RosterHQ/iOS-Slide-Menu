@@ -38,6 +38,7 @@
 
 @implementation SlideNavigationController
 
+NSString * const SlideNavigationControllerWillOpen = @"SlideNavigationControllerWillOpen";
 NSString * const SlideNavigationControllerDidOpen = @"SlideNavigationControllerDidOpen";
 NSString * const SlideNavigationControllerDidClose = @"SlideNavigationControllerDidClose";
 NSString  *const SlideNavigationControllerDidReveal = @"SlideNavigationControllerDidReveal";
@@ -506,6 +507,8 @@ static SlideNavigationController *singletonInstance;
 	[self enableTapGestureToCloseMenu:YES];
 
 	[self prepareMenuForReveal:menu];
+    
+    [self postNotificationWithName:SlideNavigationControllerWillOpen forMenu:menu];
 	
 	[UIView animateWithDuration:duration
 						  delay:0
