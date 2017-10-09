@@ -221,15 +221,16 @@ static SlideNavigationController *singletonInstance;
             break;
             
         case PopTypeAllAnimated: {
-                __block CGRect frame = viewController.view.frame;
-                frame.origin.y = -viewController.view.frame.size.height;
-                viewController.view.frame = frame;
-
-                [UIView animateWithDuration:0.3f animations:^{
-                    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+                viewController.view.alpha = 0.0;
+            
+                // Being a little tricky here to get fade in animation.
+                [super pushViewController:viewController animated:NO];
+            
+                [UIView animateWithDuration: 0.5f animations:^{
+                    viewController.view.alpha = 1.0;
+                } completion:^(BOOL finished) {
+                    [super popViewControllerAnimated:NO];
                     [self setViewControllers:@[viewController]];
-                    frame.origin.y = 0;
-                    viewController.view.frame = frame;
                 }];
             }
             break;
@@ -239,15 +240,11 @@ static SlideNavigationController *singletonInstance;
 			[super popToRootViewControllerAnimated:NO];
             
             if (poptype == PopTypeRootAnimated) {
-                __block CGRect frame = viewController.view.frame;
-                frame.origin.y = -viewController.view.frame.size.height;
-                viewController.view.frame = frame;
-
-                [UIView animateWithDuration:0.3f animations:^{
-                    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-                    [super pushViewController:viewController animated:NO];
-                    frame.origin.y = 0;
-                    viewController.view.frame = frame;
+                viewController.view.alpha = 0.0;
+                [super pushViewController:viewController animated:NO];
+                
+                [UIView animateWithDuration: 0.5f animations:^{
+                    viewController.view.alpha = 1.0;
                 }];
             }
             else {
